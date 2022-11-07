@@ -601,8 +601,11 @@ class HasMany extends AbstractRelationship
 		return $record;
 	}
 
-	public function load_eagerly($models=array(), $attributes=array(), $includes, Table $table)
+	public function load_eagerly($models=array(), $attributes=array(), $includes=[], ?Table $table=null)
 	{
+	    if (!$table) {
+	        throw new \InvalidArgumentException('table is not specified');
+        }
 		$this->set_keys($table->class->name);
 		$this->query_and_attach_related_models_eagerly($table,$models,$attributes,$includes,$this->foreign_key, $table->pk);
 	}
@@ -723,8 +726,11 @@ class BelongsTo extends AbstractRelationship
 		return $class::first($options);
 	}
 
-	public function load_eagerly($models=array(), $attributes, $includes, Table $table)
+	public function load_eagerly($models=array(), $attributes=[], $includes=[], ?Table $table=null)
 	{
+	    if (!$table) {
+            throw new \InvalidArgumentException('table is not specified');
+        }
 		$this->query_and_attach_related_models_eagerly($table,$models,$attributes,$includes, $this->primary_key,$this->foreign_key);
 	}
 }
