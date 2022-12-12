@@ -447,7 +447,7 @@ class Model
 	 * @param mixed &$value Value of the attribute
 	 * @return mixed the attribute value
 	 */
-	public function assign_attribute($name, $value)
+	public function assign_attribute($name, $value, $flagDirty=true)
 	{
 		$table = static::table();
 		if (!is_object($value)) {
@@ -478,7 +478,9 @@ class Model
 			$value->attribute_of($this,$name);
 
 		$this->attributes[$name] = $value;
-		$this->flag_dirty($name);
+		if ($flagDirty) {
+            $this->flag_dirty($name);
+        }
 		return $value;
 	}
 
