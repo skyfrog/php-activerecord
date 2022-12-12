@@ -47,6 +47,12 @@ abstract class Connection
 	 * @var bool
 	 */
 	private $logging = false;
+    /**
+     * Switch for collecting query stats.
+     *
+     * @var bool
+     */
+    private $collectQueryStats = false;
 	/**
 	 * Contains a Logger object that must impelement a log() method.
 	 *
@@ -88,6 +94,8 @@ abstract class Connection
 	 */
 	static $DEFAULT_PORT = 0;
 
+	private static $queryStats = [];
+
 	/**
 	 * Retrieve a database connection.
 	 *
@@ -123,6 +131,7 @@ abstract class Connection
 			$connection->protocol = $info->protocol;
 			$connection->logging = $config->get_logging();
 			$connection->logger = $connection->logging ? $config->get_logger() : null;
+			$connection->collectQueryStats = $config->isCollectQueryStats();
 
 			if (isset($info->charset))
 				$connection->set_encoding($info->charset);
@@ -317,6 +326,13 @@ abstract class Connection
 			$this->logger->log($sql);
 			if ( $values ) $this->logger->log($values);
 		}
+
+		if ($this->collectQueryStats) {
+		    if (!isset(self::$queryStats[$sql])) {
+                self::$queryStats[$sql] = 0;
+            }
+            self::$queryStats[$sql]++;
+        }
 
 		$this->last_query = $sql;
 
@@ -547,4 +563,7 @@ abstract class Connection
 		return false;
 	}
 
+	public static function getQueryStats() {
+	    return self::$queryStats;
+    }
 }

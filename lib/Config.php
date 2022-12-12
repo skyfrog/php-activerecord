@@ -65,6 +65,13 @@ class Config extends Singleton
 	 */
 	private $logging = false;
 
+    /**
+     * Switch for collecting query stats.
+     *
+     * @var bool
+     */
+    private $collectQueryStats = false;
+
 	/**
 	 * Contains a Logger object that must impelement a log() method.
 	 *
@@ -330,4 +337,18 @@ class Config extends Singleton
 	{
 		Cache::initialize($url,$options);
 	}
+
+    /**
+     * @return bool
+     */
+    public function isCollectQueryStats(): bool {
+        return $this->collectQueryStats;
+    }
+
+    /**
+     * @param bool $collectQueryStats
+     */
+    public function setCollectQueryStats(bool $collectQueryStats): void {
+        $this->collectQueryStats = $collectQueryStats;
+    }
 }
