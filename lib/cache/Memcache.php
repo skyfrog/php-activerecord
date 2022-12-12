@@ -52,4 +52,8 @@ class Memcache implements ActiveRecordCacheInterface
 	{
 		$this->memcache->delete($key);
 	}
+
+    public function has($key) {
+        return !!$this->memcache->get($key);
+    }
 }

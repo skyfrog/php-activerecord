@@ -9,7 +9,7 @@ class Phpmemory implements ActiveRecordCacheInterface {
     }
 
     public function read($key) {
-        return isset(self::$cache[$key]) && self::$cache[$key]['expire'] > time()
+        return $this->has($key)
             ? self::$cache[$key]['value']
             : null;
     }
@@ -23,5 +23,9 @@ class Phpmemory implements ActiveRecordCacheInterface {
 
     public function delete($key) {
         unset(self::$cache[$key]);
+    }
+
+    public function has($key) {
+        return isset(self::$cache[$key]) && self::$cache[$key]['expire'] > time();
     }
 }

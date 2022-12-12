@@ -85,6 +85,13 @@ class Cache
 		return $value;
 	}
 
+	public static function has($key) {
+        if (!static::$adapter) {
+            return false;
+        }
+        return static::$adapter->has($key);
+    }
+
 	public static function set($key, $var, $expire=null)
 	{
 		if (!static::$adapter)
