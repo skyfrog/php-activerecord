@@ -246,8 +246,18 @@ class Table
 			if ($this->cache_individual_model)
 			{
 				$key = $this->cache_key_for_model(array_intersect_key($row, array_flip($this->pk)));
+				$inCache = Cache::has($key);
 				$model = Cache::get($key, $cb, $this->cache_model_expire);
-			}
+
+                if ($inCache) {
+                    foreach ($row as $attr => $value) {
+                        if (!$model->__isset($attr)) {
+                            $model->assign_attribute($attr, $value, false);
+                        }
+                    }
+                    //Cache::set($key, $model, $this->cache_model_expire);
+                }
+            }
 			else
 			{
 				$model = $cb();
