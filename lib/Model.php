@@ -962,6 +962,8 @@ class Model
 
 		$values = $sql->bind_values();
 		$ret = $conn->query(($table->last_sql = $sql->to_s()), $values);
+
+		self::flushCache();
 		return $ret->rowCount();
 	}
 
@@ -1018,6 +1020,8 @@ class Model
 
 		$values = $sql->bind_values();
 		$ret = $conn->query(($table->last_sql = $sql->to_s()), $values);
+
+		self::flushCache();
 		return $ret->rowCount();
 
 	}
@@ -1045,6 +1049,10 @@ class Model
 
 		return true;
 	}
+
+	private static function flushCache() {
+        Cache::flush();
+    }
 
 	/**
 	 * Helper that creates an array of values for the primary key(s).
