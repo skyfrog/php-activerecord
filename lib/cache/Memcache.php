@@ -1,7 +1,7 @@
 <?php
 namespace ActiveRecord;
 
-class Memcache
+class Memcache implements CacheInterface
 {
 	const DEFAULT_PORT = 11211;
 
