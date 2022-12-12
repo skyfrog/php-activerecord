@@ -1,7 +1,7 @@
 <?php
 namespace ActiveRecord;
 
-class Phpmemory implements CacheInterface {
+class Phpmemory implements ActiveRecordCacheInterface {
     private static $cache = [];
 
     public function flush() {
