@@ -250,8 +250,11 @@ class Table
 				$model = Cache::get($key, $cb, $this->cache_model_expire);
 
                 if ($inCache) {
+                    if (count(array_diff(array_keys($row), array_keys($this->columns)))) {
+                        $model = clone $model;
+                    }
                     foreach ($row as $attr => $value) {
-                        if (!$model->__isset($attr)) {
+                        if (!in_array($attr, array_keys($this->columns))) {
                             $model->assign_attribute($attr, $value, false);
                         }
                     }
