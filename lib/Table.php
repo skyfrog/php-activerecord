@@ -243,9 +243,11 @@ class Table
 			{
 				return new $self->class->name($row, false, true, false);
 			};
-			if ($this->cache_individual_model)
+			$flipPk = array_flip($this->pk);
+            $pkKeysForCache = array_intersect_key($row, $flipPk);
+			if ($this->cache_individual_model && count($pkKeysForCache) == count($flipPk))
 			{
-				$key = $this->cache_key_for_model(array_intersect_key($row, array_flip($this->pk)));
+				$key = $this->cache_key_for_model($pkKeysForCache);
 				$inCache = Cache::has($key);
 				$model = Cache::get($key, $cb, $this->cache_model_expire);
 
