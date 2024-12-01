@@ -14,6 +14,7 @@ class SQLBuilder
 	private $connection;
 	private $operation = 'SELECT';
 	private $table;
+    private $with;
 	private $select = '*';
 	private $joins;
 	private $order;
@@ -135,6 +136,12 @@ class SQLBuilder
 		$this->select = $select;
 		return $this;
 	}
+
+    public function with($with)
+    {
+        $this->with = $with;
+        return $this;
+    }
 
 	public function joins($joins)
 	{
@@ -363,7 +370,11 @@ class SQLBuilder
 
 	private function build_select()
 	{
-		$sql = "SELECT $this->select FROM $this->table";
+        $sql = '';
+        if ($this->with) {
+            $sql .= " with $this->with ";
+        }
+		$sql .= "SELECT $this->select FROM $this->table";
 
 		if ($this->joins)
 			$sql .= ' ' . $this->joins;

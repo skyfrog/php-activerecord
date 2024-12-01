@@ -171,6 +171,9 @@ class Table
 				$options['select'] = $this->get_fully_qualified_table_name() . '.*';
 		}
 
+        if (array_key_exists('with',$options))
+            $sql->with($options['with']);
+
 		if (array_key_exists('select',$options))
 			$sql->select($options['select']);
 
