@@ -15,6 +15,7 @@ class SQLBuilder
 	private $operation = 'SELECT';
 	private $table;
     private $with;
+    private $forceIndex;
 	private $select = '*';
 	private $joins;
 	private $order;
@@ -140,6 +141,12 @@ class SQLBuilder
     public function with($with)
     {
         $this->with = $with;
+        return $this;
+    }
+
+    public function forceIndex($forceIndex)
+    {
+        $this->forceIndex = $forceIndex;
         return $this;
     }
 
@@ -374,7 +381,11 @@ class SQLBuilder
         if ($this->with) {
             $sql .= " with $this->with ";
         }
-		$sql .= "SELECT $this->select FROM $this->table";
+        $forceIndex = '';
+        if ($this->forceIndex) {
+            $forceIndex = " FORCE INDEX ($this->forceIndex) ";
+        }
+		$sql .= "SELECT $this->select FROM $this->table $forceIndex";
 
 		if ($this->joins)
 			$sql .= ' ' . $this->joins;

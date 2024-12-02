@@ -174,6 +174,9 @@ class Table
         if (array_key_exists('with',$options))
             $sql->with($options['with']);
 
+        if (array_key_exists('force_index',$options))
+            $sql->forceIndex($options['force_index']);
+
 		if (array_key_exists('select',$options))
 			$sql->select($options['select']);
 
