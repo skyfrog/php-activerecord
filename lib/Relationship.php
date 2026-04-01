@@ -704,7 +704,14 @@ class BelongsTo extends AbstractRelationship
 	public function __get($name)
 	{
 		if($name === 'primary_key' && !isset($this->primary_key)) {
-			$this->primary_key = array(Table::load($this->class_name)->pk[0]);
+            // #PD-1306:
+			// Use the full composite PK array instead of just pk[0],
+			// so belongs_to correctly resolves targets with composite primary keys.
+			// FIXME: NOTE: similar [0]-only issues exist in load_eagerly() (line ~735 ->
+			// query_and_attach_related_models_eagerly lines ~135-136) and
+			// construct_inner_join_sql() (lines ~354-366) but are not fixed here
+			// as no current code triggers those paths for composite-PK relationships.
+			$this->primary_key = Table::load($this->class_name)->pk;
 		}
 
 		return $this->$name;
